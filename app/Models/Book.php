@@ -23,10 +23,11 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Book extends Model
 {
-	protected $fillable = [
-		'title',
-		'author'
-	];
+	protected $guarded = [];
 
+	public function setAuthorAttribute($author)
+	{
+		$this->attributes['author_id'] = Author::firstOrCreate(['name' => $author]);
+	}
     use HasFactory;
 }
