@@ -11,7 +11,7 @@ class UpdateBookRequest extends FormRequest
 		return [
 			'id' => 'int',
 			'title' => 'required|string',
-			'author' => 'required|string|exists:author,name'
+			'author_id' => 'required'
 		];
 	}
 }

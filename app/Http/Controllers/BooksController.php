@@ -36,7 +36,7 @@ class BooksController extends Controller
 	{
 		return[
 			'title' => $request->title,
-			'author' => $request->author
+			'author_id' => $request->author_id
 			];
 	}
 }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -10,14 +11,14 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @property int $id
  * @property string $title
- * @property string $author
+ * @property string $author_id
 
- * @method static \Illuminate\Database\Eloquent\Builder|Members newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Members newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Members query()
- * @method static \Illuminate\Database\Eloquent\Builder|Members whereTitle($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Members whereAuthor($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Members whereId($value)
+ * @method static Builder|Book newModelQuery()
+ * @method static Builder|Book newQuery()
+ * @method static Builder|Book query()
+ * @method static Builder|Book whereTitle($value)
+ * @method static Builder|Book whereAuthorId($value)
+ * @method static Builder|Book whereId($value)
 
  * @mixin \Eloquent
  */
@@ -25,9 +26,9 @@ class Book extends Model
 {
 	protected $guarded = [];
 
-	public function setAuthorAttribute($author)
+	public function setAuthorIdAttribute($author): void
 	{
-		$this->attributes['author_id'] = Author::firstOrCreate(['name' => $author]);
+		$this->attributes['author_id'] = Author::firstOrCreate(['name' => $author])->id;
 	}
     use HasFactory;
 }

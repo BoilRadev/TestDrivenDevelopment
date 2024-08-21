@@ -13,13 +13,8 @@ class BookManagementTest extends TestCase
 
     /** @test */
     public function a_book_can_be_added_to_the_library()
-    {
-		$data = [
-			'title' => 'Some Book',
-			'author' => 'Boil'
-		];
-
-		$response = $this->post('/books', $data);
+	{
+		$response = $this->post('/books', $this->data());
 		$book = Book::first();
 
 		$response->assertFound();
@@ -30,49 +25,34 @@ class BookManagementTest extends TestCase
 	/** @test */
 	public function a_book_without_title()
 	{
-		$data = [
-			'title' => '',
-			'author' => 'Boil'
-		];
-
-		$response = $this->post('/books', $data);
+		$response = $this->post('/books',  array_merge($this->data(), ['title' => '']));
 		$response->assertSessionHasErrors('title');
 	}
 
 	/** @test */
 	public function a_book_without_author()
 	{
-		$data = [
-			'title' => 'Some Book',
-			'author' => ''
-		];
-
-		$response = $this->post('/books', $data);
-		$response->assertSessionHasErrors('author');
+		$response = $this->post('/books', array_merge($this->data(), ['author_id' => '']));
+		$response->assertSessionHasErrors('author_id');
 	}
 
 	/** @test */
 	public function a_book_can_be_updated_in_the_library()
 	{
-		$postData = [
-			'title' => 'Old Book',
-			'author' => 'Boil'
-		];
-
-		$this->post('/books', $postData);
+		$this->post('/books',  $this->data());
 
 		$book = Book::first();
 
 		$patchData = [
 			'id' => $book->id,
 			'title' => 'New Book',
-			'author' => 'New Boil'
+			'author_id' => 'New Boil'
 		];
 
 		$response = $this->patch('/books/' . $book->id, $patchData);
 		$response->assertFound();
 		$this->assertEquals('New Book', Book::first()->title);
-		$this->assertEquals('New Boil', Book::first()->author);
+		$this->assertEquals('New Boil', Book::first()->author_id);
 		$this->assertCount(1, Book::all());
 		$response->assertRedirect('/books/' . $book->id );;
 	}
@@ -80,12 +60,7 @@ class BookManagementTest extends TestCase
 	/** @test */
 	public function a_book_can_be_deleted()
 	{
-		$postData = [
-			'title' => 'Old Book',
-			'author' => 'Boil'
-		];
-
-		$this->post('/books', $postData);
+		$this->post('/books', $this->data());
 
 		$book = Book::first();
 
@@ -99,12 +74,7 @@ class BookManagementTest extends TestCase
 	/** @test */
 	public function a_new_author_is_automatically_added()
 	{
-		$postData = [
-			'title' => 'Old Book',
-			'author' => 'Boil'
-		];
-
-		$this->post('/books', $postData);
+		$this->post('/books', $this->data());
 
 		$book = Book::first();
 		$author = Author::first();
@@ -112,5 +82,13 @@ class BookManagementTest extends TestCase
 		$this->assertEquals($author->id, $book->author_id);
 		$this->assertCount(1, Author::all());
 
+	}
+
+	private function data(): array
+	{
+		return [
+			'title' => 'Some Book',
+			'author_id' => 'Boil'
+		];
 	}
 }

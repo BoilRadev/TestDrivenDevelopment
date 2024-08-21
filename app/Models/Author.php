@@ -8,10 +8,7 @@ use Carbon\Carbon;
 
 class Author extends Model
 {
-	protected $fillable = [
-		'name',
-		'birth_date'
-	];
+	protected $guarded = [];
 
 	protected $dates = [
 		'birth_date'
@@ -22,10 +19,10 @@ class Author extends Model
 		$this->attributes['birth_date'] = Carbon::parse($birthDate);
 	}
 
-	public function setAuthorAttribute($author)
-	{
-		$this->attributes['author_id'] = Author::firstOrCreate(['name' => $author]);
-	}
+//	public function setAuthorAttribute($author)
+//	{
+//		$this->attributes['author_id'] = Author::firstOrCreate(['name' => $author]);
+//	}
 
     use HasFactory;
 }
